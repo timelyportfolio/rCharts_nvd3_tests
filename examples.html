@@ -54,7 +54,8 @@ iframe {
 <pre><code class="r">## {title: Scatter Chart}
 p1 &lt;- nPlot(mpg ~ wt, group = &quot;cyl&quot;, data = mtcars, type = &quot;scatterChart&quot;)
 p1$xAxis(axisLabel = &quot;Weight&quot;)
-p1$show(&quot;iframe&quot;, cdn = F)
+p1$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p1
 </code></pre>
 
 <iframe src=assets/fig/p1.html seamless></iframe>
@@ -63,7 +64,8 @@ p1$show(&quot;iframe&quot;, cdn = F)
 hair_eye = as.data.frame(HairEyeColor)
 p2 &lt;- nPlot(Freq ~ Hair, group = &#39;Eye&#39;, data = subset(hair_eye, Sex == &quot;Female&quot;), type = &#39;multiBarChart&#39;)
 p2$chart(color = c(&#39;brown&#39;, &#39;blue&#39;, &#39;#594c26&#39;, &#39;green&#39;))
-p2$show(&quot;iframe&quot;, cdn = F)
+p2$setLib(lib=&quot;libraries/widgets/nvd3&quot;)
+p2
 </code></pre>
 
 <iframe src=assets/fig/p2.html seamless></iframe>
@@ -71,14 +73,16 @@ p2$show(&quot;iframe&quot;, cdn = F)
 <pre><code class="r">## {title: MultiBar Horizontal Chart}
 p3 &lt;- nPlot(~cyl, group = &quot;gear&quot;, data = mtcars, type = &quot;multiBarHorizontalChart&quot;)
 p3$chart(showControls = F)
-p3$show(&quot;iframe&quot;, cdn = F)
+p3$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p3
 </code></pre>
 
 <iframe src=assets/fig/p3.html seamless></iframe>
 
 <pre><code class="r">## {title: Pie Chart}
 p4 &lt;- nPlot(~cyl, data = mtcars, type = &quot;pieChart&quot;)
-p4$show(&quot;iframe&quot;, cdn = F)
+p4$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p4
 </code></pre>
 
 <iframe src=assets/fig/p4.html seamless></iframe>
@@ -86,7 +90,8 @@ p4$show(&quot;iframe&quot;, cdn = F)
 <pre><code class="r">## {title: Donut Chart}
 p5 &lt;- nPlot(~cyl, data = mtcars, type = &quot;pieChart&quot;)
 p5$chart(donut = TRUE)
-p5$show(&quot;iframe&quot;, cdn = F)
+p5$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p5
 </code></pre>
 
 <iframe src=assets/fig/p5.html seamless></iframe>
@@ -94,7 +99,8 @@ p5$show(&quot;iframe&quot;, cdn = F)
 <pre><code class="r">## {title: Line Chart}
 data(economics, package = &quot;ggplot2&quot;)
 p6 &lt;- nPlot(uempmed ~ date, data = economics, type = &quot;lineChart&quot;)
-p6$show(&quot;iframe&quot;, cdn = F)
+p6$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p6
 </code></pre>
 
 <iframe src=assets/fig/p6.html seamless></iframe>
@@ -109,7 +115,8 @@ p7 &lt;- nPlot(value ~ date, group = &quot;variable&quot;, data = ecm, type = &q
 # is specified
 p7$xAxis(tickFormat = &quot;#!function(d) {return d3.time.format(&#39;%b %Y&#39;)(new Date( d * 86400000 ));}!#&quot;)
 # test xAxis also sets x2Axis
-p7$show(&quot;iframe&quot;, cdn = F)
+p7$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p7
 </code></pre>
 
 <iframe src=assets/fig/p7.html seamless></iframe>
@@ -117,14 +124,14 @@ p7$show(&quot;iframe&quot;, cdn = F)
 <pre><code class="r"># now test setting x2Axis to something different test format dates on the
 # x2Axis test to show %Y format which is different than xAxis
 p7$x2Axis(tickFormat = &quot;#!function(d) {return d3.time.format(&#39;%Y&#39;)(new Date( d * 86400000 ));}!#&quot;)
-p7$show(&quot;iframe&quot;, cdn = F)
+p7
 </code></pre>
 
 <iframe src=assets/fig/p7a.html seamless></iframe>
 
 <pre><code class="r"># test set xAxis again to make sure it does not override set x2Axis
 p7$xAxis(NULL, replace = T)
-p7$show(&quot;iframe&quot;, cdn = F)
+p7
 </code></pre>
 
 <iframe src=assets/fig/p7a.html seamless></iframe>
@@ -133,7 +140,8 @@ p7$show(&quot;iframe&quot;, cdn = F)
 dat &lt;- data.frame(t = rep(0:23, each = 4), var = rep(LETTERS[1:4], 4), val = round(runif(4 * 
     24, 0, 50)))
 p8 &lt;- nPlot(val ~ t, group = &quot;var&quot;, data = dat, type = &quot;stackedAreaChart&quot;, id = &quot;chart&quot;)
-p8$show(&quot;iframe&quot;, cdn = F)
+p8$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p8
 </code></pre>
 
 <iframe src=assets/fig/p8.html seamless></iframe>
@@ -143,7 +151,8 @@ p9 &lt;- nPlot(value ~ date, group = &quot;variable&quot;, data = ecm, type = &q
 p9$xAxis(tickFormat = &quot;#!function(d) {return d3.time.format(&#39;%b %Y&#39;)(new Date( d * 86400000 ));}!#&quot;)
 # try new interactive guidelines feature
 p9$chart(useInteractiveGuideline = TRUE)
-p9$show(&quot;iframe&quot;, cdn = F)
+p9$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p9
 </code></pre>
 
 <iframe src=assets/fig/p9.html seamless></iframe>
@@ -151,7 +160,8 @@ p9$show(&quot;iframe&quot;, cdn = F)
 <pre><code class="r">## {title: InteractiveGuidline(Multi-Tooltips) on Stack}
 p10 &lt;- p8
 p10$chart(useInteractiveGuideline = TRUE)
-p10$show(&quot;iframe&quot;, cdn = F)
+p10$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p10
 </code></pre>
 
 <iframe src=assets/fig/p10.html seamless></iframe>
@@ -159,7 +169,8 @@ p10$show(&quot;iframe&quot;, cdn = F)
 <pre><code class="r">## {title: showDistX and showDistY}
 p11 &lt;- p1
 p11$chart(showDistX = TRUE, showDistY = TRUE)
-p11$show(&quot;iframe&quot;, cdn = F)
+p11$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p11
 </code></pre>
 
 <iframe src=assets/fig/p11.html seamless></iframe>
@@ -168,9 +179,9 @@ p11$show(&quot;iframe&quot;, cdn = F)
 p12 &lt;- nPlot(value ~ date, group = &quot;variable&quot;, data = ecm, type = &quot;multiChart&quot;)
 p12$params$multi = list(uempmed = list(type = &quot;area&quot;, yAxis = 1), psavert = list(type = &quot;line&quot;, 
     yAxis = 2))
-p12$setTemplate(script = system.file(&quot;/libraries/nvd3/layouts/multiChart.html&quot;, 
-    package = &quot;rCharts&quot;))
-p12$show(&quot;iframe&quot;, cdn = F)
+p12$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p12$templates$script = &quot;libraries/widgets/nvd3/layouts/multiChart.html&quot;
+p12
 </code></pre>
 
 <iframe src=assets/fig/p12.html seamless></iframe>
@@ -178,9 +189,9 @@ p12$show(&quot;iframe&quot;, cdn = F)
 <pre><code class="r">## {title: Facets}
 p13 &lt;- nPlot(mpg ~ wt, data = mtcars, group = &quot;gear&quot;, type = &quot;scatterChart&quot;)
 p13$params$facet = &quot;cyl&quot;
-p13$templates$script = system.file(&quot;/libraries/nvd3/layouts/nvd3FacetPlot.html&quot;, 
-    package = &quot;rCharts&quot;)
-p13$show(&quot;iframe&quot;, cdn = F)
+p13$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p13$templates$script = &quot;libraries/widgets/nvd3/layouts/nvd3FacetPlot.html&quot;
+p13
 </code></pre>
 
 <iframe src=assets/fig/p13.html seamless></iframe>
@@ -188,10 +199,10 @@ p13$show(&quot;iframe&quot;, cdn = F)
 <pre><code class="r">hair_eye = as.data.frame(HairEyeColor)
 p14 &lt;- nPlot(Freq ~ Hair, group = &quot;Eye&quot;, data = hair_eye, type = &quot;multiBarChart&quot;)
 p14$params$facet = &quot;Sex&quot;
-p14$templates$script = system.file(&quot;/libraries/nvd3/layouts/nvd3FacetPlot.html&quot;, 
-    package = &quot;rCharts&quot;)
+p14$setLib(lib = &quot;libraries/widgets/nvd3&quot;)
+p14$templates$script = &quot;libraries/widgets/nvd3/layouts/nvd3FacetPlot.html&quot;
 # p14$chart(color = c(&#39;brown&#39;, &#39;blue&#39;, &#39;#594c26&#39;, &#39;green&#39;))
-p14$show(&quot;iframe&quot;, cdn = F)
+p14
 </code></pre>
 
 <iframe src=assets/fig/p14.html seamless></iframe>

@@ -1,75 +1,34 @@
----
-title: rCharts nvd3 Tests
-author: Ramnath Vaidyanathan and Timely Portfolio
-framework: bootstrap
-mode: selfcontained
-highlighter: prettify
-hitheme: twitter-bootstrap
----
-
-<style>
-iframe {
-  height: 500px;
-  width: 900px;
-}
-</style>
-
-```{r echo=F, error= F, warning = F, message=F}
-require(knitr)
-require(rCharts)
-opts_chunk$set(results='asis', rcharts="draft")
-```
-
-```{r p1}
 ## {title: Scatter Chart}
 p1 <- nPlot(mpg ~ wt, group = 'cyl', data = mtcars, type = 'scatterChart')
 p1$xAxis(axisLabel = 'Weight')
-p1$setLib(lib="libraries/widgets/nvd3")
 p1
-```
 
-```{r p2}
+
 ## {title: MultiBar Chart}
 hair_eye = as.data.frame(HairEyeColor)
 p2 <- nPlot(Freq ~ Hair, group = 'Eye', data = subset(hair_eye, Sex == "Female"), type = 'multiBarChart')
 p2$chart(color = c('brown', 'blue', '#594c26', 'green'))
-p2$setLib(lib="libraries/widgets/nvd3")
 p2
-```
 
-
-```{r p3}
 ## {title: MultiBar Horizontal Chart}
 p3 <- nPlot(~ cyl, group = 'gear', data = mtcars, type = 'multiBarHorizontalChart')
 p3$chart(showControls = F)
-p3$setLib(lib="libraries/widgets/nvd3")
 p3
-```
 
-```{r p4}
 ## {title: Pie Chart}
 p4 <- nPlot(~ cyl, data = mtcars, type = 'pieChart')
-p4$setLib(lib="libraries/widgets/nvd3")
 p4
-```
 
-```{r p5}
 ## {title: Donut Chart}
 p5 <- nPlot(~ cyl, data = mtcars, type = 'pieChart')
 p5$chart(donut = TRUE)
-p5$setLib(lib="libraries/widgets/nvd3")
 p5
-```
 
-```{r p6}
 ## {title: Line Chart}
 data(economics, package = 'ggplot2')
 p6 <- nPlot(uempmed ~ date, data = economics, type = 'lineChart')
-p6$setLib(lib="libraries/widgets/nvd3")
 p6
-```
 
-```{r p7}
 ## {title: Line with Focus Chart }
 ecm <- reshape2::melt(economics[,c('date', 'uempmed', 'psavert')], id = 'date')
 p7 <- nPlot(value ~ date, group = 'variable', data = ecm, type = 'lineWithFocusChart')
@@ -80,12 +39,7 @@ p7 <- nPlot(value ~ date, group = 'variable', data = ecm, type = 'lineWithFocusC
 #on lineWithFocusChart type xAxis will also set x2Axis unless it is specified
 p7$xAxis( tickFormat="#!function(d) {return d3.time.format('%b %Y')(new Date( d * 86400000 ));}!#" )
 #test xAxis also sets x2Axis
-p7$setLib(lib="libraries/widgets/nvd3")
 p7
-```
-
-
-```{r p7a}
 #now test setting x2Axis to something different
 #test format dates on the x2Axis
 #test to show %Y format which is different than xAxis
@@ -94,69 +48,48 @@ p7
 #test set xAxis again to make sure it does not override set x2Axis
 p7$xAxis( NULL, replace = T)
 p7
-```
 
-```{r p8}
 ## {title: Stacked Area Chart}
 dat <- data.frame(t=rep(0:23,each=4),var=rep(LETTERS[1:4],4),val=round(runif(4*24,0,50)))
 p8 <- nPlot(val ~ t, group =  'var', data = dat, type = 'stackedAreaChart', id = 'chart')
-p8$setLib(lib="libraries/widgets/nvd3")
 p8
-```
 
-```{r p9}
+
 ## {title: InteractiveGuidline(Multi-Tooltips) on Line}
 p9 <- nPlot(value ~ date, group = 'variable', data = ecm, type = 'lineChart')
 p9$xAxis( tickFormat="#!function(d) {return d3.time.format('%b %Y')(new Date( d * 86400000 ));}!#" )
 #try new interactive guidelines feature
 p9$chart(useInteractiveGuideline=TRUE)
-p9$setLib(lib="libraries/widgets/nvd3")
 p9
-```
 
-```{r p10}
+
 ## {title: InteractiveGuidline(Multi-Tooltips) on Stack}
 p10 <- p8
 p10$chart(useInteractiveGuideline=TRUE)
-p10$setLib(lib="libraries/widgets/nvd3")
 p10
-```
 
-```{r p11}
 ## {title: showDistX and showDistY}
 p11 <- p1
 p11$chart(showDistX = TRUE, showDistY = TRUE)
-p11$setLib(lib="libraries/widgets/nvd3")
 p11
-```
 
-```{r p12}
 ## {title: multiChart}
 p12 <- nPlot(value ~ date, group = 'variable', data = ecm, type = 'multiChart')
 p12$params$multi = list(
   uempmed = list(type="area",yAxis=1),
   psavert = list(type="line",yAxis=2)
 )
-p12$setLib(lib="libraries/widgets/nvd3")
-p12$templates$script = "libraries/widgets/nvd3/layouts/multiChart.html"
+p12$setTemplate(script = system.file(
+  "/libraries/nvd3/layouts/multiChart.html",
+  package = "rCharts"
+))
 p12
-```
 
-```{r p13}
 ## {title: Facets}
 p13 <- nPlot(mpg ~ wt, data = mtcars, group = "gear", type = "scatterChart")
 p13$params$facet = "cyl"
-p13$setLib(lib="libraries/widgets/nvd3")
-p13$templates$script = "libraries/widgets/nvd3/layouts/nvd3FacetPlot.html"
+p13$templates$script = system.file(
+  "/libraries/nvd3/layouts/nvd3FacetPlot.html",
+  package = "rCharts"
+)
 p13
-```
-
-```{r p14}
-hair_eye = as.data.frame(HairEyeColor)
-p14 <- nPlot(Freq ~ Hair, group = 'Eye', data = hair_eye, type = 'multiBarChart')
-p14$params$facet="Sex"
-p14$setLib(lib="libraries/widgets/nvd3")
-p14$templates$script = "libraries/widgets/nvd3/layouts/nvd3FacetPlot.html"
-#p14$chart(color = c('brown', 'blue', '#594c26', 'green'))
-p14
-```
