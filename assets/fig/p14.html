@@ -22,10 +22,10 @@
     
   </head>
   <body>
-    <div id='chart235c1d82662c' class='rChart nvd3'></div>  
+    <div id='chart23bc1cd3ab5' class='rChart nvd3'></div>  
     
     <script type='text/javascript'>
-    drawchart235c1d82662c()
+    drawchart23bc1cd3ab5()
     setupChart = function(data, selector){
       d3.select(selector)
         .selectAll("div")
@@ -36,9 +36,9 @@
 
     
     
-    function drawchart235c1d82662c(){  
+    function drawchart23bc1cd3ab5(){  
       var opts = {
- "dom": "chart235c1d82662c",
+ "dom": "chart23bc1cd3ab5",
 "width":    800,
 "height":    400,
 "x": "Hair",
@@ -46,12 +46,12 @@
 "group": "Eye",
 "type": "multiBarChart",
 "facet": "Sex",
-"id": "chart235c1d82662c" 
+"id": "chart23bc1cd3ab5" 
 },
         data = [{"Hair":"Black","Eye":"Brown","Sex":"Male","Freq":32},{"Hair":"Brown","Eye":"Brown","Sex":"Male","Freq":53},{"Hair":"Red","Eye":"Brown","Sex":"Male","Freq":10},{"Hair":"Blond","Eye":"Brown","Sex":"Male","Freq":3},{"Hair":"Black","Eye":"Blue","Sex":"Male","Freq":11},{"Hair":"Brown","Eye":"Blue","Sex":"Male","Freq":50},{"Hair":"Red","Eye":"Blue","Sex":"Male","Freq":10},{"Hair":"Blond","Eye":"Blue","Sex":"Male","Freq":30},{"Hair":"Black","Eye":"Hazel","Sex":"Male","Freq":10},{"Hair":"Brown","Eye":"Hazel","Sex":"Male","Freq":25},{"Hair":"Red","Eye":"Hazel","Sex":"Male","Freq":7},{"Hair":"Blond","Eye":"Hazel","Sex":"Male","Freq":5},{"Hair":"Black","Eye":"Green","Sex":"Male","Freq":3},{"Hair":"Brown","Eye":"Green","Sex":"Male","Freq":15},{"Hair":"Red","Eye":"Green","Sex":"Male","Freq":7},{"Hair":"Blond","Eye":"Green","Sex":"Male","Freq":8},{"Hair":"Black","Eye":"Brown","Sex":"Female","Freq":36},{"Hair":"Brown","Eye":"Brown","Sex":"Female","Freq":66},{"Hair":"Red","Eye":"Brown","Sex":"Female","Freq":16},{"Hair":"Blond","Eye":"Brown","Sex":"Female","Freq":4},{"Hair":"Black","Eye":"Blue","Sex":"Female","Freq":9},{"Hair":"Brown","Eye":"Blue","Sex":"Female","Freq":34},{"Hair":"Red","Eye":"Blue","Sex":"Female","Freq":7},{"Hair":"Blond","Eye":"Blue","Sex":"Female","Freq":64},{"Hair":"Black","Eye":"Hazel","Sex":"Female","Freq":5},{"Hair":"Brown","Eye":"Hazel","Sex":"Female","Freq":29},{"Hair":"Red","Eye":"Hazel","Sex":"Female","Freq":7},{"Hair":"Blond","Eye":"Hazel","Sex":"Female","Freq":5},{"Hair":"Black","Eye":"Green","Sex":"Female","Freq":2},{"Hair":"Brown","Eye":"Green","Sex":"Female","Freq":14},{"Hair":"Red","Eye":"Green","Sex":"Female","Freq":7},{"Hair":"Blond","Eye":"Green","Sex":"Female","Freq":8}]
         
-      var data = d3.nest()
-        .key(function(d){ return d[opts.facet]} )
+var data = d3.nest()
+        .key(function(d){ return d[opts.facet]} )    
         .entries(data)
         
       facets = d3.select("#" + opts.id)
@@ -66,12 +66,24 @@
           .key(function(d){
             return opts.group === undefined ? 'main' : d[opts.group]
           })
-          .entries([d])
+          .key(function(d){
+            return d[opts.x]
+          })          
+          .rollup(function(d){
+              tempobj = {};
+              tempobj[opts.x] = d[0][opts.x];
+              tempobj[opts.y] = d3.sum(d, function(dd) {
+                return dd[opts.y];
+              });
+              return tempobj;
+          })          
+          .entries(d.values)
       
          nv.addGraph(function() {
            var chart = nv.models[opts.type]()
-             .x(function(d) { return d[opts.x] })
-             .y(function(d) { return d[opts.y] })
+             .x(function(d) {
+               return d.values[opts.x] })
+             .y(function(d) { return d.values[opts.y] })
              .width(opts.width)
              .height(opts.height / facets[0].length)
          
@@ -82,7 +94,7 @@
            
       
          d3.select(facets[0][i])
-          .datum([d])
+          .datum(d3.values(data))
           .transition().duration(500)
           .call(chart);
 
