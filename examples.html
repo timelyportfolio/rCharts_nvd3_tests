@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>rCharts nvd3 Tests</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <link rel="icon" type="image/png" href="favicon.ico">
+  <style>
+  body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+  }
+  </style>
+  
+<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.no-responsive.no-icons.min.css" rel="stylesheet">
+<!-- <link rel="stylesheet" href="/css/bootstrap.min.css"> -->
+<link  rel="stylesheet" 
+    href="http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
+  <link rel="stylesheet" href="libraries/frameworks/bootstrap/css/bootstrap-responsive.min.css">
+  
+  <link rel="stylesheet" href="libraries/frameworks/bootstrap/css/main.css">
+  <link rel="stylesheet" href="libraries/highlighters/prettify/css/twitter-bootstrap.css" />
+  <script src="libraries/frameworks/bootstrap/js/vendor/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/frameworks/bootstrap/js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+    
+  
+</head>
+<body>
+   <!--[if lt IE 7]>
+     <p class="chromeframe">You are using an outdated browser. 
+       <a href="http://browsehappy.com/">Upgrade your browser today</a> or 
+       <a href="http://www.google.com/chromeframe/?redirect=true"> 
+         install Google Chrome Frame
+       </a> to better experience this site.
+    </p>
+   <![endif]-->
+   <!-- Ref: http://twitter.github.com/bootstrap/examples/hero.html -->
+   
+    <div class="container">
+      
+<style>
+iframe {
+  height: 500px;
+  width: 900px;
+}
+</style>
+
+<pre><code class="r">## {title: Scatter Chart}
+p1 &lt;- nPlot(mpg ~ wt, group = &quot;cyl&quot;, data = mtcars, type = &quot;scatterChart&quot;)
+p1$xAxis(axisLabel = &quot;Weight&quot;)
+p1$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p1.html seamless></iframe>
+
+<pre><code class="r">## {title: MultiBar Chart}
+hair_eye = as.data.frame(HairEyeColor)
+p2 &lt;- nPlot(Freq ~ Hair, group = &#39;Eye&#39;, data = subset(hair_eye, Sex == &quot;Female&quot;), type = &#39;multiBarChart&#39;)
+p2$chart(color = c(&#39;brown&#39;, &#39;blue&#39;, &#39;#594c26&#39;, &#39;green&#39;))
+p2$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p2.html seamless></iframe>
+
+<pre><code class="r">## {title: MultiBar Horizontal Chart}
+p3 &lt;- nPlot(~cyl, group = &quot;gear&quot;, data = mtcars, type = &quot;multiBarHorizontalChart&quot;)
+p3$chart(showControls = F)
+p3$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p3.html seamless></iframe>
+
+<pre><code class="r">## {title: Pie Chart}
+p4 &lt;- nPlot(~cyl, data = mtcars, type = &quot;pieChart&quot;)
+p4$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p4.html seamless></iframe>
+
+<pre><code class="r">## {title: Donut Chart}
+p5 &lt;- nPlot(~cyl, data = mtcars, type = &quot;pieChart&quot;)
+p5$chart(donut = TRUE)
+p5$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p5.html seamless></iframe>
+
+<pre><code class="r">## {title: Line Chart}
+data(economics, package = &quot;ggplot2&quot;)
+p6 &lt;- nPlot(uempmed ~ date, data = economics, type = &quot;lineChart&quot;)
+p6$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p6.html seamless></iframe>
+
+<pre><code class="r">## {title: Line with Focus Chart }
+ecm &lt;- reshape2::melt(economics[, c(&quot;date&quot;, &quot;uempmed&quot;, &quot;psavert&quot;)], id = &quot;date&quot;)
+p7 &lt;- nPlot(value ~ date, group = &quot;variable&quot;, data = ecm, type = &quot;lineWithFocusChart&quot;)
+# test format dates on the xAxis also good test of javascript functions as
+# parameters dates from R to JSON will come over as number of days since
+# 1970-01-01 so convert to milliseconds 86400000 in a day and then format
+# with d3 on lineWithFocusChart type xAxis will also set x2Axis unless it
+# is specified
+p7$xAxis(tickFormat = &quot;#!function(d) {return d3.time.format(&#39;%b %Y&#39;)(new Date( d * 86400000 ));}!#&quot;)
+# test xAxis also sets x2Axis
+p7$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p7.html seamless></iframe>
+
+<pre><code class="r"># now test setting x2Axis to something different test format dates on the
+# x2Axis test to show %Y format which is different than xAxis
+p7$x2Axis(tickFormat = &quot;#!function(d) {return d3.time.format(&#39;%Y&#39;)(new Date( d * 86400000 ));}!#&quot;)
+p7$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p7a.html seamless></iframe>
+
+<pre><code class="r"># test set xAxis again to make sure it does not override set x2Axis
+p7$xAxis(NULL, replace = T)
+p7$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p7a.html seamless></iframe>
+
+<pre><code class="r">## {title: Stacked Area Chart}
+dat &lt;- data.frame(t = rep(0:23, each = 4), var = rep(LETTERS[1:4], 4), val = round(runif(4 * 
+    24, 0, 50)))
+p8 &lt;- nPlot(val ~ t, group = &quot;var&quot;, data = dat, type = &quot;stackedAreaChart&quot;, id = &quot;chart&quot;)
+p8$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p8.html seamless></iframe>
+
+<pre><code class="r">## {title: InteractiveGuidline(Multi-Tooltips) on Line}
+p9 &lt;- nPlot(value ~ date, group = &quot;variable&quot;, data = ecm, type = &quot;lineChart&quot;)
+p9$xAxis(tickFormat = &quot;#!function(d) {return d3.time.format(&#39;%b %Y&#39;)(new Date( d * 86400000 ));}!#&quot;)
+# try new interactive guidelines feature
+p9$chart(useInteractiveGuideline = TRUE)
+p9$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p9.html seamless></iframe>
+
+<pre><code class="r">## {title: InteractiveGuidline(Multi-Tooltips) on Stack}
+p10 &lt;- p8
+p10$chart(useInteractiveGuideline = TRUE)
+p10$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p10.html seamless></iframe>
+
+<pre><code class="r">## {title: showDistX and showDistY}
+p11 &lt;- p1
+p11$chart(showDistX = TRUE, showDistY = TRUE)
+p11$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p11.html seamless></iframe>
+
+<pre><code class="r">## {title: multiChart}
+p12 &lt;- nPlot(value ~ date, group = &quot;variable&quot;, data = ecm, type = &quot;multiChart&quot;)
+p12$params$multi = list(uempmed = list(type = &quot;area&quot;, yAxis = 1), psavert = list(type = &quot;line&quot;, 
+    yAxis = 2))
+p12$setTemplate(script = system.file(&quot;/libraries/nvd3/layouts/multiChart.html&quot;, 
+    package = &quot;rCharts&quot;))
+p12$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p12.html seamless></iframe>
+
+<pre><code class="r">## {title: Facets}
+p13 &lt;- nPlot(mpg ~ wt, data = mtcars, group = &quot;gear&quot;, type = &quot;scatterChart&quot;)
+p13$params$facet = &quot;cyl&quot;
+p13$templates$script = system.file(&quot;/libraries/nvd3/layouts/nvd3FacetPlot.html&quot;, 
+    package = &quot;rCharts&quot;)
+p13$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p13.html seamless></iframe>
+
+<pre><code class="r">hair_eye = as.data.frame(HairEyeColor)
+p14 &lt;- nPlot(Freq ~ Hair, group = &quot;Eye&quot;, data = hair_eye, type = &quot;multiBarChart&quot;)
+p14$params$facet = &quot;Sex&quot;
+p14$templates$script = system.file(&quot;/libraries/nvd3/layouts/nvd3FacetPlot.html&quot;, 
+    package = &quot;rCharts&quot;)
+# p14$chart(color = c(&#39;brown&#39;, &#39;blue&#39;, &#39;#594c26&#39;, &#39;green&#39;))
+p14$show(&quot;iframe&quot;, cdn = F)
+</code></pre>
+
+<iframe src=assets/fig/p14.html seamless></iframe>
+
+    </div>
+        
+</body>
+  <script src="libraries/frameworks/bootstrap/js/vendor/bootstrap.min.js"></script>
+  <script src="libraries/frameworks/bootstrap/js/plugins.js"></script>
+  <script src="libraries/frameworks/bootstrap/js/main.js"></script>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- Google Prettify -->
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/188.0.0/prettify.js"></script>
+  <script src='libraries/highlighters/prettify/js/lang-r.js'></script>
+  <script>
+    var pres = document.getElementsByTagName("pre");
+    for (var i=0; i < pres.length; ++i) {
+      pres[i].className = "prettyprint linenums";
+    }
+    prettyPrint();
+  </script>
+  <!-- End Google Prettify --> 
+  </html>
